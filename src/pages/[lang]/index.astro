@@ -6,7 +6,7 @@ import IgReel from '../../components/IgReel.astro';
 import ContactBand from '../../components/ContactBand.astro';
 import Icon from '../../components/Icon.astro';
 import { formatCount, getClients, parseCount, reelsOf } from '../../lib/clients';
-import { formatDate, getStaticLangPaths, tr, useT, type Key, type Lang } from '../../i18n/ui';
+import { formatDate, getStaticLangPaths, tr, useT, type Key, type Lang, url } from '../../i18n/ui';
 
 export const getStaticPaths = getStaticLangPaths;
 
@@ -41,13 +41,13 @@ const steps: Key[] = ['process.discovery', 'process.strategy', 'process.executio
         <h1>{g ? t('hero.title', { from: g.before.followers, to: g.after.followers }) : t('footer.tagline')}</h1>
         <p class="lede">{t('hero.sub')}</p>
         <div class="actions">
-          <a class="btn btn--gold" href={`/${lang}/clients/`}>{t('hero.stories')} <Icon name="arrow" flip /></a>
-          <a class="btn btn--on-dark" href={`/${lang}/reels/`}><Icon name="play" /> {t('hero.reels')}</a>
+          <a class="btn btn--gold" href={url(`/${lang}/clients/`)}>{t('hero.stories')} <Icon name="arrow" flip /></a>
+          <a class="btn btn--on-dark" href={url(`/${lang}/reels/`)}><Icon name="play" /> {t('hero.reels')}</a>
         </div>
       </div>
       {
         hero && (
-          <a class="hero-card" href={`/${lang}/clients/${hero.id}/`} aria-label={t('hero.case', { name: tr(hero.data.name, lang) })}>
+          <a class="hero-card" href={url(`/${lang}/clients/${hero.id}/`)} aria-label={t('hero.case', { name: tr(hero.data.name, lang) })}>
             <GrowthCard client={hero} lang={lang} />
             <span class="case-link">
               {t('hero.case', { name: tr(hero.data.name, lang) })} <Icon name="arrow" flip />
@@ -79,7 +79,7 @@ const steps: Key[] = ['process.discovery', 'process.strategy', 'process.executio
           <h2>{t('home.stories')}</h2>
           <p class="lede">{t('home.stories.sub')}</p>
         </div>
-        <a class="link-arrow" href={`/${lang}/clients/`}>{t('home.stories.all')} <Icon name="arrow" flip /></a>
+        <a class="link-arrow" href={url(`/${lang}/clients/`)}>{t('home.stories.all')} <Icon name="arrow" flip /></a>
       </div>
       <div class="cards">
         {featured.map((c) => <ClientCard client={c} lang={lang} />)}
@@ -97,7 +97,7 @@ const steps: Key[] = ['process.discovery', 'process.strategy', 'process.executio
         </div>
         <div class="head-actions">
           <button class="btn btn--on-dark btn--sm" type="button" data-present="#best-reels"><Icon name="present" /> {t('present.start')}</button>
-          <a class="btn btn--gold btn--sm" href={`/${lang}/reels/`}>{t('home.reels.all')} <Icon name="arrow" flip /></a>
+          <a class="btn btn--gold btn--sm" href={url(`/${lang}/reels/`)}>{t('home.reels.all')} <Icon name="arrow" flip /></a>
         </div>
       </div>
       <div class="reels" data-deck>
@@ -114,7 +114,7 @@ const steps: Key[] = ['process.discovery', 'process.strategy', 'process.executio
           <h2>{t('services.title')}</h2>
           <p class="lede">{t('services.sub')}</p>
         </div>
-        <a class="link-arrow" href={`/${lang}/services/`}>{t('nav.services')} <Icon name="arrow" flip /></a>
+        <a class="link-arrow" href={url(`/${lang}/services/`)}>{t('nav.services')} <Icon name="arrow" flip /></a>
       </div>
       <ol class="services" role="list">
         {
@@ -157,7 +157,7 @@ const steps: Key[] = ['process.discovery', 'process.strategy', 'process.executio
           allClients.map((c) => (
             <li>
               {c.data.showcase === 'story' ? (
-                <a href={`/${lang}/clients/${c.id}/`}>{tr(c.data.name, lang)}</a>
+                <a href={url(`/${lang}/clients/${c.id}/`)}>{tr(c.data.name, lang)}</a>
               ) : (
                 <span>{tr(c.data.name, lang)}</span>
               )}

@@ -3,7 +3,7 @@
 // The iframe height is set from Instagram's MEASURE message (see Base.astro).
 import Icon from './Icon.astro';
 import { igEmbed, type Reel } from '../lib/clients';
-import { formatDate, tr, useT, type Lang } from '../i18n/ui';
+import { formatDate, tr, useT, type Lang, url } from '../i18n/ui';
 
 interface Props {
   reel: Reel;
@@ -27,7 +27,7 @@ const src = igEmbed(reel.code);
   data-who={name}
 >
   <header class="head">
-    {showClient ? <a class="who" href={`/${lang}/clients/${c.id}/`}>{name}</a> : <span class="who">{formatDate(reel.date, lang)}</span>}
+    {showClient ? <a class="who" href={url(`/${lang}/clients/${c.id}/`)}>{name}</a> : <span class="who">{formatDate(reel.date, lang)}</span>}
     <span class="views"><strong class="num">{reel.views}</strong> {t('reels.views')}</span>
   </header>
   <div class="frame">

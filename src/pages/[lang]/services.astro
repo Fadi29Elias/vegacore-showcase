@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import PageHead from '../../components/PageHead.astro';
 import ContactBand from '../../components/ContactBand.astro';
 import Icon from '../../components/Icon.astro';
-import { getStaticLangPaths, useT, type Key, type Lang } from '../../i18n/ui';
+import { getStaticLangPaths, useT, type Key, type Lang, url } from '../../i18n/ui';
 
 export const getStaticPaths = getStaticLangPaths;
 
@@ -16,7 +16,7 @@ const steps: Key[] = ['process.discovery', 'process.strategy', 'process.executio
 
 <Base lang={lang} title={t('nav.services')} description={t('services.sub')} active="nav.services">
   <PageHead eyebrow="Marketing Department" title={t('services.title')} lede={t('services.sub')}>
-    <a class="btn btn--gold proof-link" href={`/${lang}/clients/`}>{t('hero.stories')} <Icon name="arrow" flip /></a>
+    <a class="btn btn--gold proof-link" href={url(`/${lang}/clients/`)}>{t('hero.stories')} <Icon name="arrow" flip /></a>
   </PageHead>
 
   <section class="wrap list-section">

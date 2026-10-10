@@ -6,8 +6,11 @@ export const dir = (lang: Lang) => (lang === 'ar' ? 'rtl' : 'ltr');
 export const other = (lang: Lang): Lang => (lang === 'ar' ? 'en' : 'ar');
 export const tr = (field: L | undefined, lang: Lang) => (field ? field[lang] : '');
 
-/** Same page in the other language: /ar/clients/ ↔ /en/clients/ */
-export const switchPath = (pathname: string, to: Lang) => pathname.replace(/^\/(ar|en)(?=\/|$)/, `/${to}`);
+/** Internal link that respects the site's base path (e.g. GitHub Pages' /vegacore-showcase). */
+export const url = (path: string) => `${import.meta.env.BASE_URL.replace(/\/$/, '')}${path}`;
+
+/** Same page in the other language: /ar/clients/ ↔ /en/clients/ (base path kept) */
+export const switchPath = (pathname: string, to: Lang) => pathname.replace(/\/(ar|en)(?=\/|$)/, `/${to}`);
 
 export const contact = {
   whatsapp: '+963 939 421 195',

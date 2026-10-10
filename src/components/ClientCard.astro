@@ -1,7 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import type { Client } from '../lib/clients';
-import { tr, useT, type Key, type Lang } from '../i18n/ui';
+import { tr, useT, type Key, type Lang, url } from '../i18n/ui';
 
 interface Props {
   client: Client;
@@ -10,7 +10,7 @@ interface Props {
 const { client, lang } = Astro.props;
 const t = useT(lang);
 const d = client.data;
-const href = `/${lang}/clients/${client.id}/`;
+const href = url(`/${lang}/clients/${client.id}/`);
 const lead = d.stats[0];
 const rest = d.stats.slice(1, 3);
 ---

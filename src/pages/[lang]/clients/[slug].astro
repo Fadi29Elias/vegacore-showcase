@@ -7,7 +7,7 @@ import ClientCard from '../../../components/ClientCard.astro';
 import ContactBand from '../../../components/ContactBand.astro';
 import Icon from '../../../components/Icon.astro';
 import { getClients, igProfile, reelsOf } from '../../../lib/clients';
-import { formatDate, langs, tr, useT, type Key, type Lang } from '../../../i18n/ui';
+import { formatDate, langs, tr, useT, type Key, type Lang, url } from '../../../i18n/ui';
 
 export async function getStaticPaths() {
   const { stories } = await getClients();
@@ -28,7 +28,7 @@ const others = stories.filter((c) => c.id !== client.id && c.data.industry !== '
   <section class="hero dark">
     <div class:list={['wrap', 'grid', { solo: !d.growth }]}>
       <div class="intro">
-        <a class="back link-arrow" href={`/${lang}/clients/`}><Icon name="arrow" class="back-icon" /> {t('nav.stories')}</a>
+        <a class="back link-arrow" href={url(`/${lang}/clients/`)}><Icon name="arrow" class="back-icon" /> {t('nav.stories')}</a>
         <span class="chip chip--gold">{d.industry === 'vegacore' ? t('story.ours') : t(`industry.${d.industry}` as Key)}</span>
         <h1>{name}</h1>
         <p class="headline">{tr(d.headline, lang)}</p>

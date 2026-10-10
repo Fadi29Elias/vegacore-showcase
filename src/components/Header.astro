@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import logo from '../assets/brand/vega-logo-full.png';
 import Icon from './Icon.astro';
-import { other, switchPath, useT, type Key, type Lang } from '../i18n/ui';
+import { other, switchPath, useT, type Key, type Lang, url } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
@@ -22,13 +22,13 @@ const to = other(lang);
 
 <header class="site-header">
   <div class="wrap bar">
-    <a class="brand" href={`/${lang}/`} aria-label="VegaCore">
+    <a class="brand" href={url(`/${lang}/`)} aria-label="VegaCore">
       <Image src={logo} alt="VegaCore" height={52} densities={[1, 2]} loading="eager" />
     </a>
     <nav id="site-nav" class="nav" aria-label={t('nav.menu')}>
       {
         links.map(([href, key]) => (
-          <a href={`/${lang}/${href}`} aria-current={active === key ? 'page' : undefined}>
+          <a href={url(`/${lang}/${href}`)} aria-current={active === key ? 'page' : undefined}>
             {t(key)}
           </a>
         ))

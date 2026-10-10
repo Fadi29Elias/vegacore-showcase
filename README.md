@@ -3,7 +3,7 @@
 A bilingual (Arabic-first) portfolio site for the sales team. They present it to new clients in meetings and share it as a link afterwards.
 It shows **real results only**: client success stories, real Instagram numbers, and the reels themselves played with Instagram's own player.
 
-Built with [Astro](https://astro.build) as a static site and deployed on Vercel.
+Built with [Astro](https://astro.build) as a static site, hosted on GitHub Pages.
 
 Pages (`/ar/…` and `/en/…`): Home · Success Stories · client story pages · Reels · Services · Contact.
 
@@ -34,12 +34,14 @@ Each client is one file in `src/content/clients/<slug>.yaml`. Copy `poplar.yaml`
 
 Instagram view counts keep changing, so refresh the numbers and `asOf` from time to time.
 
-## Deploy (Vercel)
+## Deploy (GitHub Pages)
 
-1. Create a **private** GitHub repo from this folder (`git init`, commit, push).
-2. On vercel.com → *Add New Project* → import the repo. Astro is detected automatically.
-3. *Settings → Domains* → add `work.vegacore.co`, then create the CNAME it shows (`cname.vercel-dns.com`) at the vegacore.co DNS provider.
-4. Every push to the main branch redeploys.
+Every push to `main` builds and publishes the site automatically (`.github/workflows/deploy.yml`).
+Live at https://fadi29elias.github.io/vegacore-showcase/. Check the run under the repo's **Actions** tab.
 
-Note: Vercel's free *Hobby* plan is for non-commercial use. A company site belongs on *Pro*.
-Cloudflare Pages (free, commercial use allowed) also works with this project unchanged.
+To use `work.vegacore.co` instead:
+1. In the repo → *Settings → Pages → Custom domain*, enter `work.vegacore.co`.
+2. At the vegacore.co DNS provider, add a `CNAME` record: `work` → `fadi29elias.github.io`.
+3. The workflow picks up the new address on the next deploy; links switch to the domain root automatically.
+
+Internal links must go through `url()` from `src/i18n/ui.ts` so they work under both addresses.
