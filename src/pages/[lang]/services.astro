@@ -1,0 +1,180 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import ContactBand from '../../components/ContactBand.astro';
+import Icon from '../../components/Icon.astro';
+import { getStaticLangPaths, useT, type Key, type Lang } from '../../i18n/ui';
+
+export const getStaticPaths = getStaticLangPaths;
+
+const lang = Astro.params.lang as Lang;
+const t = useT(lang);
+const services: Key[] = ['svc.production', 'svc.creators', 'svc.photo', 'svc.reels', 'svc.story', 'svc.growth'];
+const beyond: Key[] = ['beyond.business', 'beyond.software', 'beyond.ai'];
+const steps: Key[] = ['process.discovery', 'process.strategy', 'process.execution', 'process.launch'];
+---
+
+<Base lang={lang} title={t('nav.services')} description={t('services.sub')} active="nav.services">
+  <PageHead eyebrow="Marketing Department" title={t('services.title')} lede={t('services.sub')}>
+    <a class="btn btn--gold proof-link" href={`/${lang}/clients/`}>{t('hero.stories')} <Icon name="arrow" flip /></a>
+  </PageHead>
+
+  <section class="wrap list-section">
+    <ol class="services" role="list">
+      {
+        services.map((k, i) => (
+          <li class="card svc">
+            <span class="n num">{String(i + 1).padStart(2, '0')}</span>
+            <h2>{t(k)}</h2>
+            <p>{t(`${k}.text` as Key)}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="section dark">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>{t('process.title')}</h2>
+      </div>
+      <ol class="process" role="list">
+        {
+          steps.map((k, i) => (
+            <li>
+              <span class="n num">{i + 1}</span>
+              <h3>{t(k)}</h3>
+              <p>{t(`${k}.text` as Key)}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap beyond">
+      <div>
+        <span class="eyebrow latin">Business Development • Marketing • Technology • Strategy</span>
+        <h2>{t('services.beyond')}</h2>
+        <p class="lede">{t('services.beyond.text')}</p>
+      </div>
+      <ul class="tags" role="list">
+        {beyond.map((k) => <li class="chip">{t(k)}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <ContactBand lang={lang} />
+</Base>
+
+<style>
+  .proof-link {
+    justify-self: start;
+    margin-top: 6px;
+  }
+  .list-section {
+    padding-bottom: clamp(48px, 7vw, 88px);
+  }
+  .services {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+  }
+  .svc {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+    padding: 26px 24px 28px;
+    border-inline-start: 4px solid var(--blue);
+  }
+  .svc:nth-child(3n + 2) {
+    border-inline-start-color: var(--gold);
+  }
+  .svc:nth-child(3n + 3) {
+    border-inline-start-color: var(--teal);
+  }
+  .svc .n {
+    color: var(--blue);
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+  .svc h2 {
+    font-size: 1.3rem;
+  }
+  .svc p {
+    color: var(--muted);
+  }
+  .process {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+  }
+  .process li {
+    display: grid;
+    gap: 8px;
+    align-content: start;
+    padding: 22px;
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .process .n {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 800;
+  }
+  .process h3 {
+    font-size: 1.15rem;
+  }
+  .process p {
+    color: var(--on-dark-muted);
+    font-size: 0.95rem;
+  }
+  .beyond {
+    display: grid;
+    gap: 20px;
+    padding: clamp(28px, 5vw, 48px);
+    border-radius: calc(var(--radius) + 6px);
+    background:
+      linear-gradient(var(--surface), var(--surface)) padding-box,
+      var(--rule) border-box;
+    border: 2px solid transparent;
+    box-shadow: var(--shadow);
+  }
+  .beyond h2 {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    margin: 10px 0 8px;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .tags .chip {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+  @media (max-width: 900px) {
+    .process {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 560px) {
+    .process {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

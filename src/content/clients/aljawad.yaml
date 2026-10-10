@@ -1,0 +1,29 @@
+name: { ar: "الجواد للتداول والاستشارات المالية", en: "Al Jawad Trading & Financial Consulting" }
+handle: aljawad_trading_
+industry: finance
+category: { ar: "وساطة واستشارات مالية", en: "Brokerage & financial consulting" }
+location: { ar: "دمشق — طرطوس", en: "Damascus — Tartus" }
+featured: true
+order: 3
+since: "2026-08"
+headline: { ar: "ريل بـ 30.2K مشاهدة لصفحة لديها 365 متابع", en: "A 30.2K-view reel from a page with 365 followers" }
+before:
+  ar: "شركة وساطة واستشارات مالية — مجال يحتاج إلى وضوح وثقة قبل أي قرار."
+  en: "A brokerage and financial consulting firm — a field where people need clarity and trust before any decision."
+did:
+  - { ar: "22 ريل منذ آب 2026 — ريل كل يومين تقريباً.", en: "22 reels since August 2026 — roughly one every two days." }
+  - { ar: "إنتاج ونشر منتظم من الفكرة إلى المونتاج.", en: "Steady production and publishing, from idea to edit." }
+after:
+  ar: "93.9K مشاهدة إجمالاً، وريلان وصلا إلى 30.2K و18.3K — أضعاف عدد متابعي الصفحة."
+  en: "93.9K total views, with two reels reaching 30.2K and 18.3K — many times the page's follower count."
+stats:
+  - { label: { ar: "أعلى ريل", en: "Top reel" }, value: "30.2K", note: { ar: "مشاهدة", en: "views" } }
+  - { label: { ar: "مجموع المشاهدات", en: "Total views" }, value: "93.9K", note: { ar: "خلال فترة عملنا", en: "during our work" } }
+  - { label: { ar: "ريلز", en: "Reels" }, value: "22", note: { ar: "منذ آب 2026", en: "since Aug 2026" } }
+  - { label: { ar: "متابعو الصفحة", en: "Page followers" }, value: "365" }
+period: { reels: 22, views: "93.9K" }
+reels:
+  - { code: DcbghyhtCUV, views: "30.2K", date: "2026-08-24" }
+  - { code: DeEwANLtVYE, views: "18.3K", date: "2026-10-04" }
+  - { code: DdB8q19Nj6f, views: "5,796", date: "2026-09-08" }
+asOf: "2026-10-10"

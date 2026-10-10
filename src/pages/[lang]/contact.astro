@@ -1,0 +1,121 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import Icon from '../../components/Icon.astro';
+import { contact, getStaticLangPaths, useT, type Lang } from '../../i18n/ui';
+
+export const getStaticPaths = getStaticLangPaths;
+
+const lang = Astro.params.lang as Lang;
+const t = useT(lang);
+const channels = [
+  { icon: 'whatsapp', label: t('contact.whatsapp'), value: contact.whatsapp, href: contact.whatsappUrl, num: true, primary: true },
+  { icon: 'mail', label: t('contact.email'), value: contact.email, href: `mailto:${contact.email}` },
+  { icon: 'instagram', label: t('contact.instagram'), value: contact.instagram, href: contact.instagramUrl },
+  { icon: 'globe', label: t('contact.web'), value: contact.web, href: contact.webUrl },
+] as const;
+---
+
+<Base lang={lang} title={t('contact.title')} description={t('contact.sub')} active="nav.contact">
+  <PageHead eyebrow="Contact" title={t('contact.title')} lede={t('contact.sub')} />
+  <section class="wrap body">
+    <ul class="channels" role="list">
+      {
+        channels.map((c) => (
+          <li>
+            <a class:list={['card', 'channel', { primary: 'primary' in c }]} href={c.href} target={c.href.startsWith('http') ? '_blank' : undefined} rel="noopener">
+              <span class="ic"><Icon name={c.icon} /></span>
+              <span class="label">{c.label}</span>
+              <span class:list={['value', 'num' in c ? 'num' : 'latin']} dir="ltr">{c.value}</span>
+              <Icon name="arrow" flip class="go" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="base"><Icon name="pin" /> {t('contact.base')}</p>
+  </section>
+</Base>
+
+<style>
+  .body {
+    padding-bottom: clamp(64px, 9vw, 120px);
+  }
+  .channels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .channel {
+    position: relative;
+    display: grid;
+    gap: 6px;
+    padding: 28px 26px;
+    color: var(--navy);
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .channel:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+  }
+  .channel.primary {
+    background: var(--navy-deep);
+    border-color: transparent;
+    color: #fff;
+  }
+  .ic {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    margin-bottom: 10px;
+    border-radius: 16px;
+    background: var(--blue-pale);
+    color: var(--navy);
+  }
+  .primary .ic {
+    background: var(--gold);
+  }
+  .label {
+    color: var(--muted);
+    font-size: 0.86rem;
+    font-weight: 700;
+  }
+  .primary .label {
+    color: var(--on-dark-muted);
+  }
+  .value {
+    justify-self: start;
+    font-size: 1.2rem;
+    font-weight: 800;
+  }
+  .channel :global(.go) {
+    position: absolute;
+    top: 28px;
+    inset-inline-end: 24px;
+    width: 22px;
+    height: 22px;
+    opacity: 0.5;
+  }
+  .base {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 28px;
+    color: var(--muted);
+  }
+  .base :global(svg) {
+    width: 20px;
+    height: 20px;
+    color: var(--blue);
+  }
+  @media (max-width: 860px) {
+    .channels {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

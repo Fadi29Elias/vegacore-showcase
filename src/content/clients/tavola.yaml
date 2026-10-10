@@ -1,0 +1,24 @@
+name: { ar: "TAVOLA", en: "TAVOLA" }
+handle: tavola.apps
+industry: restaurants
+category: { ar: "تطبيق حجز مطاعم — قيد الإطلاق", en: "Restaurant reservation app — pre-launch" }
+order: 6
+since: "2026-09"
+headline: { ar: "إطلاق علامة من الصفر: 9.1K مشاهدة قبل إطلاق التطبيق", en: "Launching a brand from zero: 9.1K views before the app goes live" }
+before:
+  ar: "تطبيق حجز مطاعم لم يُطلق بعد — صفحة جديدة بلا جمهور."
+  en: "A restaurant reservation app that hasn't launched yet — a brand-new page with no audience."
+did:
+  - { ar: "6 ريلز تعريفية منذ أيلول 2026 تشرح الفكرة: Discover · Reserve · Enjoy.", en: "6 teaser reels since September 2026 explaining the idea: Discover · Reserve · Enjoy." }
+after:
+  ar: "9.1K مشاهدة لصفحة لديها 44 متابع — الجمهور يتعرّف على العلامة قبل الإطلاق."
+  en: "9.1K views for a page with 44 followers — people are meeting the brand before launch."
+stats:
+  - { label: { ar: "مجموع المشاهدات", en: "Total views" }, value: "9.1K", note: { ar: "من 6 ريلز", en: "from 6 reels" } }
+  - { label: { ar: "متابعو الصفحة", en: "Page followers" }, value: "44" }
+period: { reels: 6, views: "9.1K" }
+reels:
+  - { code: DdeO_EWMkO3, views: "2,421", date: "2026-09-19" }
+  - { code: Ddjj7Z6sDjv, views: "2,150", date: "2026-09-21" }
+  - { code: DdrQRKpOhqG, views: "1,931", date: "2026-09-24" }
+asOf: "2026-10-10"

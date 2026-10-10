@@ -1,0 +1,296 @@
+---
+import Base from '../../../layouts/Base.astro';
+import GrowthCard from '../../../components/GrowthCard.astro';
+import StatGrid from '../../../components/StatGrid.astro';
+import IgReel from '../../../components/IgReel.astro';
+import ClientCard from '../../../components/ClientCard.astro';
+import ContactBand from '../../../components/ContactBand.astro';
+import Icon from '../../../components/Icon.astro';
+import { getClients, igProfile, reelsOf } from '../../../lib/clients';
+import { formatDate, langs, tr, useT, type Key, type Lang } from '../../../i18n/ui';
+
+export async function getStaticPaths() {
+  const { stories } = await getClients();
+  return langs.flatMap((lang) => stories.map((client) => ({ params: { lang, slug: client.id }, props: { client } })));
+}
+
+const { client } = Astro.props;
+const lang = Astro.params.lang as Lang;
+const t = useT(lang);
+const d = client.data;
+const name = tr(d.name, lang);
+const reels = reelsOf([client]);
+const { stories } = await getClients();
+const others = stories.filter((c) => c.id !== client.id && c.data.industry !== 'vegacore').slice(0, 3);
+---
+
+<Base lang={lang} title={name} description={tr(d.headline, lang)} active="nav.stories">
+  <section class="hero dark">
+    <div class:list={['wrap', 'grid', { solo: !d.growth }]}>
+      <div class="intro">
+        <a class="back link-arrow" href={`/${lang}/clients/`}><Icon name="arrow" class="back-icon" /> {t('nav.stories')}</a>
+        <span class="chip chip--gold">{d.industry === 'vegacore' ? t('story.ours') : t(`industry.${d.industry}` as Key)}</span>
+        <h1>{name}</h1>
+        <p class="headline">{tr(d.headline, lang)}</p>
+        <p class="meta">
+          {tr(d.category, lang)}
+          {d.location && <span> · {tr(d.location, lang)}</span>}
+        </p>
+        {d.since && <p class="since">{t('story.since', { date: formatDate(d.since, lang) })}</p>}
+        <div class="actions">
+          {
+            reels.length > 0 && (
+              <button class="btn btn--gold" type="button" data-present="#client-reels">
+                <Icon name="present" /> {t('present.start')}
+              </button>
+            )
+          }
+          <a class="btn btn--on-dark" href={igProfile(d.handle)} target="_blank" rel="noopener">
+            <Icon name="instagram" /> <span class="latin" dir="ltr">@{d.handle}</span>
+          </a>
+        </div>
+      </div>
+      {d.growth && <GrowthCard client={client} lang={lang} />}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <ol class="story" role="list">
+        {
+          d.before && (
+            <li>
+              <span class="step num">1</span>
+              <h2>{t('story.start')}</h2>
+              <p>{tr(d.before, lang)}</p>
+            </li>
+          )
+        }
+        <li>
+          <span class="step num">{d.before ? 2 : 1}</span>
+          <h2>{t('story.did')}</h2>
+          <ul class="checks" role="list">
+            {d.did.map((x) => <li>{tr(x, lang)}</li>)}
+          </ul>
+        </li>
+        {
+          d.after && (
+            <li class="result">
+              <span class="step num">{d.before ? 3 : 2}</span>
+              <h2>{t('story.result')}</h2>
+              <p>{tr(d.after, lang)}</p>
+            </li>
+          )
+        }
+      </ol>
+    </div>
+  </section>
+
+  {
+    d.stats.length > 0 && (
+      <section class="section dark">
+        <div class="wrap">
+          <div class="section-head">
+            <h2>{t('story.results')}</h2>
+          </div>
+          <StatGrid stats={d.stats} lang={lang} />
+          <p class="source">
+            {d.source && <>{tr(d.source, lang)} </>}
+            {d.asOf && t('proof.asof', { date: formatDate(d.asOf, lang) })}
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    reels.length > 0 && (
+      <section class="section" id="client-reels">
+        <div class="wrap">
+          <div class="section-head">
+            <h2>{t('story.reels')}</h2>
+            <a class="link-arrow" href={igProfile(d.handle)} target="_blank" rel="noopener">
+              {t('story.profile')} <Icon name="external" />
+            </a>
+          </div>
+          <div class="reels" data-deck>
+            {reels.map((r) => (
+              <IgReel reel={r} lang={lang} showClient={false} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    others.length > 0 && (
+      <section class="section more">
+        <div class="wrap">
+          <h2 class="more-title">{t('story.more')}</h2>
+          <div class="cards">
+            {others.map((c) => (
+              <ClientCard client={c} lang={lang} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <ContactBand lang={lang} />
+</Base>
+
+<style>
+  .hero {
+    padding-block: clamp(40px, 6vw, 72px);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: clamp(28px, 5vw, 64px);
+    align-items: center;
+  }
+  .grid.solo {
+    grid-template-columns: 1fr;
+  }
+  .intro {
+    display: grid;
+    gap: 14px;
+    justify-items: start;
+  }
+  .back {
+    color: var(--on-dark-muted);
+    font-size: 0.9rem;
+  }
+  .back :global(.back-icon) {
+    width: 16px;
+    height: 16px;
+    transform: scaleX(-1);
+  }
+  :global(html[dir='rtl']) .back :global(.back-icon) {
+    transform: none;
+  }
+  h1 {
+    font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+  }
+  .headline {
+    font-size: clamp(1.25rem, 2.6vw, 1.7rem);
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1.5;
+    max-width: 30ch;
+  }
+  .meta {
+    color: #c9d3ee;
+  }
+  .since {
+    color: var(--on-dark-muted);
+    font-size: 0.9rem;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 6px;
+  }
+
+  .story {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .story > li {
+    position: relative;
+    display: grid;
+    gap: 10px;
+    align-content: start;
+    padding: 26px 24px 28px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .story > li.result {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 1px var(--gold), var(--shadow);
+  }
+  .step {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    background: var(--navy);
+    color: #fff;
+    font-weight: 700;
+  }
+  .result .step {
+    background: var(--gold);
+    color: var(--navy);
+  }
+  .story h2 {
+    font-size: 1.25rem;
+  }
+  .story p {
+    color: var(--ink);
+  }
+  .checks {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .checks li {
+    position: relative;
+    padding-inline-start: 26px;
+  }
+  .checks li::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    top: 0.6em;
+    width: 12px;
+    height: 12px;
+    border-radius: 4px;
+    background: var(--gold);
+  }
+
+  .source {
+    margin-top: 16px;
+    color: var(--on-dark-muted);
+    font-size: 0.85rem;
+  }
+  .reels {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 22px;
+    align-items: start;
+  }
+  .more {
+    padding-top: 0;
+  }
+  .more-title {
+    font-size: 1.4rem;
+    margin-bottom: 18px;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 600px) {
+    .reels {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

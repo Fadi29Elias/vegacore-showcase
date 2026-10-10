@@ -1,0 +1,7 @@
+# Listed by name only, at VegaCore's request.
+name: { ar: "E-Store", en: "E-Store" }
+handle: e.store_0_
+industry: retail
+category: { ar: "متجر — توصيل لكل سوريا", en: "Store — delivery across Syria" }
+showcase: name
+order: 20

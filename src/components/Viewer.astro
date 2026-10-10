@@ -1,0 +1,267 @@
+---
+// Full-screen reel viewer used two ways:
+//  • a [data-open] button inside a [data-item] → opens at that reel
+//  • a [data-present="<css selector>"] button → present mode: full screen, from the first reel
+// It walks every visible [data-item] in the same [data-deck], so filtered-out reels are skipped.
+// Keys: ←/→ (direction-aware), PageUp/PageDown (presenter clickers), Home/End, Esc. Swipe on touch.
+import Icon from './Icon.astro';
+import { useT, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const t = useT(Astro.props.lang);
+---
+
+<dialog id="viewer" class="viewer" aria-label={t('present.start')}>
+  <div class="v-top">
+    <div class="v-meta">
+      <span class="v-client"></span>
+      <strong class="v-title"></strong>
+    </div>
+    <span class="v-count num" aria-live="polite"></span>
+    <button class="v-btn v-close" type="button" aria-label={t('present.close')}><Icon name="close" /></button>
+  </div>
+  <div class="v-stage"></div>
+  <button class="v-btn v-nav v-prev" type="button" aria-label={t('present.prev')}><Icon name="prev" flip /></button>
+  <button class="v-btn v-nav v-next" type="button" aria-label={t('present.next')}><Icon name="next" flip /></button>
+  <div class="v-progress"><span></span></div>
+</dialog>
+
+<script>
+  type Slide = { t: 'ig'; src: string; title: string; who: string };
+
+  const dlg = document.getElementById('viewer') as HTMLDialogElement;
+  const stage = dlg.querySelector('.v-stage') as HTMLElement;
+  const elTitle = dlg.querySelector('.v-title') as HTMLElement;
+  const elWho = dlg.querySelector('.v-client') as HTMLElement;
+  const elCount = dlg.querySelector('.v-count') as HTMLElement;
+  const elBar = dlg.querySelector('.v-progress span') as HTMLElement;
+  const btnPrev = dlg.querySelector('.v-prev') as HTMLButtonElement;
+  const btnNext = dlg.querySelector('.v-next') as HTMLButtonElement;
+  const rtl = document.documentElement.dir === 'rtl';
+
+  let slides: Slide[] = [];
+  let index = 0;
+
+  const deckItems = (scope: ParentNode) =>
+    [...scope.querySelectorAll<HTMLElement>('[data-item]')].filter((n) => !n.closest('[hidden]'));
+
+  function open(items: HTMLElement[], start: HTMLElement | null, present: boolean) {
+    slides = [];
+    let startAt = 0;
+    for (const item of items) {
+      if (item === start) startAt = slides.length;
+      for (const s of JSON.parse(item.dataset.steps || '[]')) {
+        slides.push({ ...s, title: item.dataset.title || '', who: item.dataset.who || '' });
+      }
+    }
+    if (!slides.length) return;
+    index = startAt;
+    if (!dlg.open) dlg.showModal();
+    if (present) document.documentElement.requestFullscreen?.().catch(() => {});
+    render();
+  }
+
+  function render() {
+    const s = slides[index];
+    const f = document.createElement('iframe');
+    f.src = s.src;
+    f.className = 'ig m-ig';
+    f.title = s.who;
+    f.allowFullscreen = true;
+    f.setAttribute('scrolling', 'no');
+    stage.replaceChildren(f);
+    elTitle.textContent = s.title;
+    elWho.textContent = s.who;
+    elCount.textContent = `${index + 1} / ${slides.length}`;
+    elBar.style.width = `${((index + 1) / slides.length) * 100}%`;
+    btnPrev.disabled = index === 0;
+    btnNext.disabled = index === slides.length - 1;
+  }
+
+  function go(delta: number) {
+    const to = Math.max(0, Math.min(slides.length - 1, index + delta));
+    if (to !== index) {
+      index = to;
+      render();
+    }
+  }
+
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const opener = target.closest<HTMLElement>('[data-open]');
+    if (opener) {
+      const item = opener.closest<HTMLElement>('[data-item]');
+      if (item) open(deckItems(opener.closest('[data-deck]') ?? document), item, false);
+      return;
+    }
+    const presenter = target.closest<HTMLElement>('[data-present]');
+    if (presenter) {
+      const scope = (presenter.dataset.present && document.querySelector(presenter.dataset.present)) || document;
+      open(deckItems(scope), null, true);
+    }
+  });
+
+  dlg.querySelector('.v-close')!.addEventListener('click', () => dlg.close());
+  btnPrev.addEventListener('click', () => go(-1));
+  btnNext.addEventListener('click', () => go(1));
+
+  dlg.addEventListener('keydown', (e) => {
+    const keys: Record<string, number> = {
+      ArrowRight: rtl ? -1 : 1,
+      ArrowLeft: rtl ? 1 : -1,
+      PageDown: 1,
+      PageUp: -1,
+      Home: -slides.length,
+      End: slides.length,
+    };
+    const d = keys[e.key];
+    if (d === undefined) return;
+    e.preventDefault();
+    go(d);
+  });
+
+  // Swipe on the empty area around the reel (the iframe itself keeps its own touch handling).
+  let sx = 0;
+  let sy = 0;
+  stage.addEventListener('pointerdown', (e) => {
+    sx = e.clientX;
+    sy = e.clientY;
+  });
+  stage.addEventListener('pointerup', (e) => {
+    const dx = e.clientX - sx;
+    const dy = e.clientY - sy;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) go(dx < 0 !== rtl ? 1 : -1);
+  });
+
+  dlg.addEventListener('close', () => {
+    stage.replaceChildren();
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+  });
+</script>
+
+<style>
+  .viewer {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background:
+      radial-gradient(900px 500px at 15% 0%, rgba(28, 117, 188, 0.28), transparent 60%),
+      #05041a;
+    color: #fff;
+    overflow: hidden;
+  }
+  .viewer[open] {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
+  .viewer::backdrop {
+    background: rgba(5, 4, 26, 0.9);
+  }
+  :global(html:has(dialog[open])) {
+    overflow: hidden;
+  }
+  .v-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px clamp(16px, 3vw, 28px);
+  }
+  .v-meta {
+    display: grid;
+    min-width: 0;
+    flex: 1;
+    line-height: 1.35;
+  }
+  .v-client {
+    color: var(--gold);
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+  .v-title {
+    font-size: 1.05rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .v-count {
+    color: var(--on-dark-muted);
+    font-size: 0.9rem;
+  }
+  .v-btn {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+  .v-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.18);
+  }
+  .v-btn:disabled {
+    opacity: 0.25;
+    cursor: default;
+  }
+  .v-stage {
+    display: grid;
+    justify-items: center;
+    align-items: start;
+    min-height: 0;
+    padding: 0 clamp(12px, 8vw, 96px) 16px;
+    overflow-y: auto;
+  }
+  .v-stage :global(.m-ig) {
+    width: min(440px, 100%);
+    height: 760px;
+    border: 0;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: var(--shadow-lg);
+  }
+  .v-nav {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    width: 56px;
+    height: 56px;
+  }
+  .v-prev {
+    inset-inline-start: clamp(8px, 2vw, 24px);
+  }
+  .v-next {
+    inset-inline-end: clamp(8px, 2vw, 24px);
+  }
+  .v-progress {
+    height: 3px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .v-progress span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--rule);
+    transition: width 0.25s ease;
+  }
+  @media (max-width: 640px) {
+    .v-nav {
+      top: auto;
+      bottom: 18px;
+      translate: none;
+      width: 48px;
+      height: 48px;
+    }
+    .v-stage {
+      padding-bottom: 84px;
+    }
+  }
+</style>

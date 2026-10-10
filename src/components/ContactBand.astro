@@ -1,0 +1,49 @@
+---
+import Icon from './Icon.astro';
+import { contact, useT, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+---
+
+<section class="band">
+  <div class="wrap inner">
+    <div>
+      <h2>{t('contact.title')}</h2>
+      <p class="lede">{t('contact.sub')}</p>
+    </div>
+    <div class="actions">
+      <a class="btn btn--gold" href={contact.whatsappUrl} target="_blank" rel="noopener"><Icon name="whatsapp" /> {t('contact.cta')}</a>
+      <a class="btn btn--ghost" href={`mailto:${contact.email}`}><Icon name="mail" /> <span class="latin">{contact.email}</span></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .band {
+    padding-block: clamp(48px, 7vw, 88px);
+    background:
+      radial-gradient(600px 300px at 90% 0%, rgba(255, 194, 0, 0.18), transparent 70%),
+      linear-gradient(120deg, var(--blue-pale) 0%, var(--blue-pale2) 60%);
+    border-top: 1px solid var(--line);
+  }
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px 40px;
+  }
+  h2 {
+    font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+    margin-bottom: 8px;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+</style>

@@ -1,0 +1,80 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PageHead from '../../../components/PageHead.astro';
+import ClientCard from '../../../components/ClientCard.astro';
+import ContactBand from '../../../components/ContactBand.astro';
+import { getClients } from '../../../lib/clients';
+import { getStaticLangPaths, tr, useT, type Lang } from '../../../i18n/ui';
+
+export const getStaticPaths = getStaticLangPaths;
+
+const lang = Astro.params.lang as Lang;
+const t = useT(lang);
+const { stories, names } = await getClients();
+---
+
+<Base lang={lang} title={t('stories.title')} description={t('stories.sub')} active="nav.stories">
+  <PageHead eyebrow="Success Stories" title={t('stories.title')} lede={t('stories.sub')} />
+  <section class="wrap body">
+    <div class="cards">
+      {stories.map((c) => <ClientCard client={c} lang={lang} />)}
+    </div>
+    {
+      names.length > 0 && (
+        <div class="also">
+          <h2>{t('stories.also')}</h2>
+          <ul role="list">
+            {names.map((c) => (
+              <li>
+                <strong>{tr(c.data.name, lang)}</strong>
+                <span>{tr(c.data.category, lang)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+  </section>
+  <ContactBand lang={lang} />
+</Base>
+
+<style>
+  .body {
+    padding-bottom: clamp(56px, 8vw, 96px);
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .also {
+    margin-top: 48px;
+  }
+  .also h2 {
+    font-size: 1.2rem;
+    margin-bottom: 14px;
+  }
+  .also ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .also li {
+    display: grid;
+    padding: 12px 20px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    line-height: 1.4;
+  }
+  .also strong {
+    color: var(--navy);
+  }
+  .also span {
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+</style>

@@ -1,0 +1,23 @@
+# VegaCore's own page — shown last, not counted in client totals.
+name: { ar: "VegaCore", en: "VegaCore" }
+handle: vegacore.co
+industry: vegacore
+category: { ar: "صفحتنا", en: "Our own page" }
+order: 50
+since: "2026-06"
+headline: { ar: "نطبّق الشيء نفسه على صفحتنا: 41 ريل و450K مشاهدة", en: "We do the same for ourselves: 41 reels, 450K views" }
+did:
+  - { ar: "41 ريل منذ حزيران 2026 عن التسويق والتقنية وتطوير الأعمال.", en: "41 reels since June 2026 on marketing, technology and business development." }
+after:
+  ar: "450.2K مشاهدة إجمالاً، وأقوى ريل 74.9K."
+  en: "450.2K total views, with the strongest reel at 74.9K."
+stats:
+  - { label: { ar: "ريلز", en: "Reels" }, value: "41", note: { ar: "منذ حزيران 2026", en: "since June 2026" } }
+  - { label: { ar: "مجموع المشاهدات", en: "Total views" }, value: "450.2K" }
+  - { label: { ar: "أعلى ريل", en: "Top reel" }, value: "74.9K", note: { ar: "مشاهدة", en: "views" } }
+period: { reels: 41, views: "450.2K" }
+reels:
+  - { code: DbGsn0jgH_2, views: "74.9K", date: "2026-07-22" }
+  - { code: DdluUPQA-lx, views: "40.9K", date: "2026-09-22" }
+  - { code: Db8hFRfgXci, views: "24.7K", date: "2026-08-12" }
+asOf: "2026-10-10"

@@ -1,0 +1,33 @@
+# Stats from the VegaCore monthly report (elias-dahdal-report/, as of 4 Aug 2026); reels from Instagram on asOf.
+name: { ar: "عيادة د. إلياس دحدل", en: "Dr. Elias Dahdal Clinic" }
+handle: eliasdahdal.clinic
+industry: healthcare
+category: { ar: "عيادة أسنان وتجميل", en: "Dental & beauty clinic" }
+location: { ar: "دمشق — التجارة", en: "Damascus — Al Tijara" }
+featured: true
+order: 2
+since: "2026-07"
+headline: { ar: "المشاهدات ×3.3 والوصول ×23 في الشهر الأول", en: "Views ×3.3 and reach ×23 in the first month" }
+before:
+  ar: "قبل أن نبدأ، كانت 13.3% فقط من المشاهدات من غير المتابعين — المحتوى لم يكن يصل إلى جمهور جديد."
+  en: "Before we took over, only 13.3% of views came from non-followers — the content wasn't reaching new people."
+did:
+  - { ar: "إدارة المحتوى وإنتاج ريلز منتظمة منذ تموز 2026 — 18 ريل حتى اليوم.", en: "Content management and regular reels since July 2026 — 18 reels so far." }
+  - { ar: "قياس كل ريل، وتقرير أداء شهري للعيادة.", en: "Every reel measured, with a monthly performance report for the clinic." }
+after:
+  ar: "في الشهر الأول: ارتفعت المشاهدات من 166.3K إلى 542.3K، والوصول من 10.7K إلى 246.3K، وأصبحت 70.8% من المشاهدات من جمهور جديد."
+  en: "In the first month: views went from 166.3K to 542.3K, reach from 10.7K to 246.3K, and 70.8% of views came from new people."
+stats:
+  - { label: { ar: "المشاهدات", en: "Views" }, value: "542.3K", from: "166.3K", note: { ar: "×3.3", en: "×3.3" } }
+  - { label: { ar: "الوصول", en: "Accounts reached" }, value: "246.3K", from: "10.7K", note: { ar: "×23", en: "×23" } }
+  - { label: { ar: "التفاعلات", en: "Interactions" }, value: "6,117", from: "1,034", note: { ar: "×5.9", en: "×5.9" } }
+  - { label: { ar: "مشاهدات من غير المتابعين", en: "Views from non-followers" }, value: "70.8%", from: "13.3%" }
+source:
+  ar: "الأرقام من تقرير الأداء الشهري — آب 2026 (حتى 4 Aug 2026)."
+  en: "Figures from the monthly performance report — August 2026 (as of 4 Aug 2026)."
+period: { reels: 18, views: "235.6K" }
+reels:
+  - { code: DbGo0ezOfko, views: "64.3K", date: "2026-07-22" }
+  - { code: Db8c8z0M-Ud, views: "35.4K", date: "2026-08-12" }
+  - { code: DbBTYE7tP3q, views: "27.1K", date: "2026-07-20" }
+asOf: "2026-10-10"

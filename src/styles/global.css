@@ -1,0 +1,337 @@
+/* VegaCore brand tokens — from vegacore-claude/.claude/skills/pdf-generator/kit/brand/IDENTITY.md */
+:root {
+  --navy: #15286b;
+  --navy-deep: #09072c;
+  --navy-mid: #1d3f8f;
+  --blue: #1c75bc;
+  --blue-dark: #155e97;
+  --blue-pale: #dce8f6;
+  --blue-pale2: #f1f6fc;
+  --gold: #ffc200; /* text on gold is always navy */
+  --teal: #0f7f88;
+
+  --ink: #0e1538;
+  --muted: #56617f;
+  --line: rgba(21, 40, 107, 0.12);
+  --bg: #f5f8fd;
+  --surface: #ffffff;
+  --on-dark: #e9eefa;
+  --on-dark-muted: #a9b5d6;
+
+  --rule: linear-gradient(90deg, var(--navy) 0%, var(--blue) 62%, var(--gold) 100%);
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 1px 2px rgba(9, 7, 44, 0.06), 0 12px 32px rgba(21, 40, 107, 0.1);
+  --shadow-lg: 0 24px 60px rgba(9, 7, 44, 0.22);
+
+  --font-en: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-ar: 'Almarai', 'Inter', system-ui, sans-serif;
+
+  --wrap: 1200px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --header-h: 72px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(1200px 600px at 85% -10%, rgba(28, 117, 188, 0.12), transparent 60%),
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: auto, 48px 48px, 48px 48px;
+  background-attachment: fixed, scroll, scroll;
+  color: var(--ink);
+  font-family: var(--font-en);
+  font-size: 17px;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+html[lang='ar'] body {
+  font-family: var(--font-ar);
+  line-height: 1.85;
+}
+
+img,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  color: var(--navy);
+  line-height: 1.2;
+  font-weight: 800;
+  text-wrap: balance;
+}
+
+html[lang='ar'] :is(h1, h2, h3, h4) {
+  line-height: 1.45;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Numbers always Western digits, rendered LTR */
+.num {
+  font-family: var(--font-en);
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Block-level numbers still sit on the reading-start side in Arabic. */
+html[dir='rtl'] .num {
+  text-align: right;
+}
+
+.latin {
+  font-family: var(--font-en);
+}
+
+.wrap {
+  width: min(100% - 2 * var(--gutter), var(--wrap));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: clamp(56px, 8vw, 104px);
+}
+
+.section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px 24px;
+  flex-wrap: wrap;
+  margin-block-end: clamp(24px, 4vw, 40px);
+}
+
+.section-head h2 {
+  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-en);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+.eyebrow::before {
+  content: '';
+  width: 28px;
+  height: 2px;
+  background: var(--rule);
+  border-radius: 2px;
+}
+
+.lede {
+  font-size: clamp(1.02rem, 1.6vw, 1.18rem);
+  color: var(--muted);
+  max-width: 62ch;
+}
+
+.rule {
+  height: 3px;
+  border: 0;
+  border-radius: 3px;
+  background: var(--rule);
+  margin: 0;
+}
+
+/* Buttons */
+.btn {
+  --bg-btn: var(--navy);
+  --fg-btn: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--bg-btn);
+  color: var(--fg-btn);
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.98rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(21, 40, 107, 0.22);
+}
+
+.btn svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+.btn--gold {
+  --bg-btn: var(--gold);
+  --fg-btn: var(--navy);
+}
+
+.btn--ghost {
+  --bg-btn: transparent;
+  --fg-btn: var(--navy);
+  border-color: var(--line);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(6px);
+}
+
+.btn--on-dark {
+  --bg-btn: rgba(255, 255, 255, 0.08);
+  --fg-btn: #fff;
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.btn--sm {
+  min-height: 40px;
+  padding: 0 16px;
+  font-size: 0.9rem;
+}
+
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: var(--blue);
+  text-decoration: none;
+}
+
+.link-arrow:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Arrows point in reading direction */
+html[dir='rtl'] .flip {
+  transform: scaleX(-1);
+}
+
+/* Chips / tags */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--blue-pale2);
+  border: 1px solid var(--line);
+  color: var(--navy);
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.chip--gold {
+  background: var(--gold);
+  border-color: transparent;
+  color: var(--navy);
+}
+
+.chip--dark {
+  background: rgba(9, 7, 44, 0.62);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  backdrop-filter: blur(6px);
+}
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* Dark band (video sections) */
+.dark {
+  background:
+    radial-gradient(900px 500px at 10% 0%, rgba(28, 117, 188, 0.35), transparent 60%),
+    radial-gradient(700px 400px at 100% 100%, rgba(255, 194, 0, 0.08), transparent 60%),
+    var(--navy-deep);
+  color: var(--on-dark);
+}
+
+.dark :is(h1, h2, h3) {
+  color: #fff;
+}
+
+.dark .lede {
+  color: var(--on-dark-muted);
+}
+
+.dark .eyebrow {
+  color: var(--gold);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

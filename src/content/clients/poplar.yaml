@@ -1,0 +1,32 @@
+# Numbers from Instagram on asOf, plus the before/after profile screenshot VegaCore supplied.
+name: { ar: "Poplar", en: "Poplar" }
+handle: poplar_tr
+industry: fashion
+category: { ar: "ألبسة تركية — جملة ومفرق", en: "Turkish clothing — wholesale & retail" }
+location: { ar: "دمشق — القصاع", en: "Damascus — Al Qassaa" }
+featured: true
+order: 1
+since: "2026-05"
+headline: { ar: "من 530 متابع إلى 14.6K", en: "From 530 to 14.6K followers" }
+before:
+  ar: "متجر ألبسة تركية في القصاع بصفحة صغيرة: 530 متابع، ولم يتجاوز أعلى ريل لديه 5.5K مشاهدة."
+  en: "A Turkish clothing store in Al Qassaa with a small page: 530 followers, and no reel above 5.5K views."
+did:
+  - { ar: "من أيار 2026: ريل كل يوم تقريباً — 25 ريل خلال 10 أسابيع.", en: "From May 2026: a reel almost every day — 25 reels in 10 weeks." }
+  - { ar: "إنتاج الريلز من الفكرة إلى المونتاج والنشر.", en: "Reels produced end to end — from idea to edit to publishing." }
+after:
+  ar: "14.6K متابع اليوم — أي 27 ضعفاً — وريل واحد وصل إلى 4.6 مليون مشاهدة."
+  en: "14.6K followers today — 27× — and one reel reached 4.6 million views."
+growth:
+  before: { followers: "530", posts: "49" }
+  after: { followers: "14.6K", posts: "69" }
+stats:
+  - { label: { ar: "أعلى ريل", en: "Top reel" }, value: "4.6M", from: "5.5K", note: { ar: "مشاهدة", en: "views" } }
+  - { label: { ar: "مجموع المشاهدات", en: "Total views" }, value: "5.3M", note: { ar: "خلال فترة عملنا", en: "during our work" } }
+  - { label: { ar: "ريلز", en: "Reels" }, value: "25", note: { ar: "خلال 10 أسابيع", en: "in 10 weeks" } }
+period: { reels: 25, views: "5.3M" }
+reels:
+  - { code: DZ2imFktnJK, views: "4.6M", date: "2026-06-21" }
+  - { code: DYrzDtbtx-2, views: "206K", date: "2026-05-23" }
+  - { code: DZXbDnNtj8A, views: "61K", date: "2026-06-09" }
+asOf: "2026-10-10"

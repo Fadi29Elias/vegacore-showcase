@@ -1,0 +1,27 @@
+name: { ar: "Famille Travel", en: "Famille Travel" }
+handle: familletravel1
+industry: travel
+category: { ar: "سياحة وفيز", en: "Tours & visas" }
+featured: true
+order: 4
+since: "2026-06"
+headline: { ar: "185K مشاهدة لريل واحد — لصفحة لديها أقل من 1,000 متابع", en: "185K views on one reel — from a page under 1,000 followers" }
+before:
+  ar: "مكتب سياحة وفيز: رحلات للأردن ولبنان واليونان، وفيز دراسة وقبولات جامعية باليونان."
+  en: "A travel and visa office: tours to Jordan, Lebanon and Greece, plus student visas and university admissions in Greece."
+did:
+  - { ar: "5 ريلز منذ حزيران 2026.", en: "5 reels since June 2026." }
+  - { ar: "إنتاج الريلز من الفكرة إلى المونتاج والنشر.", en: "Reels produced end to end — from idea to edit to publishing." }
+after:
+  ar: "ريل وصل إلى 185K مشاهدة وآخر إلى 43.1K — 236.1K مشاهدة من خمسة ريلز فقط."
+  en: "One reel reached 185K views and another 43.1K — 236.1K views from just five reels."
+stats:
+  - { label: { ar: "أعلى ريل", en: "Top reel" }, value: "185K", note: { ar: "مشاهدة", en: "views" } }
+  - { label: { ar: "مجموع المشاهدات", en: "Total views" }, value: "236.1K", note: { ar: "من 5 ريلز", en: "from 5 reels" } }
+  - { label: { ar: "متابعو الصفحة", en: "Page followers" }, value: "933" }
+period: { reels: 5, views: "236.1K" }
+reels:
+  - { code: Da0f9-Cs0vi, views: "185K", date: "2026-07-15" }
+  - { code: DaX_Ac3Ibzk, views: "43.1K", date: "2026-07-04" }
+  - { code: DZctVjEIH6k, views: "6,551", date: "2026-06-11" }
+asOf: "2026-10-10"

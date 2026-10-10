@@ -1,0 +1,28 @@
+name: { ar: "Bello", en: "Bello" }
+handle: bello.tr.mf
+industry: fashion
+category: { ar: "متجر ألبسة رجالية", en: "Menswear store" }
+location: { ar: "دمشق — أبو رمانة", en: "Damascus — Abu Rummaneh" }
+featured: true
+order: 5
+since: "2026-07"
+headline: { ar: "34 ريل في شهرين — ريل كل يوم تقريباً", en: "34 reels in two months — almost one a day" }
+before:
+  ar: "متجر ألبسة رجالية بأبو رمانة، مع توصيل بدمشق وشحن للمحافظات."
+  en: "A menswear store in Abu Rummaneh, delivering in Damascus and shipping across Syria."
+did:
+  - { ar: "منذ 11 تموز 2026: ريل يومي لأكثر من 5 أسابيع.", en: "From 11 July 2026: a daily reel for more than five weeks." }
+  - { ar: "إنتاج الريلز من الفكرة إلى المونتاج والنشر.", en: "Reels produced end to end — from idea to edit to publishing." }
+after:
+  ar: "170.9K مشاهدة إجمالاً، وأقوى ريلين 15.4K و14.4K — لصفحة لديها 4.8K متابع."
+  en: "170.9K total views, with the strongest reels at 15.4K and 14.4K — for a page with 4.8K followers."
+stats:
+  - { label: { ar: "ريلز", en: "Reels" }, value: "34", note: { ar: "شبه يومي", en: "almost daily" } }
+  - { label: { ar: "مجموع المشاهدات", en: "Total views" }, value: "170.9K", note: { ar: "خلال فترة عملنا", en: "during our work" } }
+  - { label: { ar: "أعلى ريل", en: "Top reel" }, value: "15.4K", note: { ar: "مشاهدة", en: "views" } }
+period: { reels: 34, views: "170.9K" }
+reels:
+  - { code: DbBiui4MMh-, views: "15.4K", date: "2026-07-20" }
+  - { code: DbbSbtRsMHr, views: "14.4K", date: "2026-07-30" }
+  - { code: DbTE1sCCja0, views: "9,766", date: "2026-07-27" }
+asOf: "2026-10-10"

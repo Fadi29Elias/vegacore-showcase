@@ -1,0 +1,419 @@
+---
+import Base from '../../layouts/Base.astro';
+import GrowthCard from '../../components/GrowthCard.astro';
+import ClientCard from '../../components/ClientCard.astro';
+import IgReel from '../../components/IgReel.astro';
+import ContactBand from '../../components/ContactBand.astro';
+import Icon from '../../components/Icon.astro';
+import { formatCount, getClients, parseCount, reelsOf } from '../../lib/clients';
+import { formatDate, getStaticLangPaths, tr, useT, type Key, type Lang } from '../../i18n/ui';
+
+export const getStaticPaths = getStaticLangPaths;
+
+const lang = Astro.params.lang as Lang;
+const t = useT(lang);
+const { stories, names, paying, totals, asOf } = await getClients();
+
+const hero = stories.find((c) => c.data.growth);
+const g = hero?.data.growth;
+const featured = stories.filter((c) => c.data.featured);
+// The strongest reel of each client.
+const best = reelsOf(paying)
+  .filter((r, i, all) => all.findIndex((x) => x.client.id === r.client.id) === i)
+  .sort((a, b) => parseCount(b.views) - parseCount(a.views));
+const allClients = [...paying, ...names];
+
+const proof = [
+  { value: String(totals.reels), label: t('proof.reels') },
+  { value: formatCount(totals.views), label: t('proof.views') },
+  { value: formatCount(totals.top), label: t('proof.top') },
+  ...(g ? [{ value: `×${Math.floor(parseCount(g.after.followers) / parseCount(g.before.followers))}`, label: `${t('proof.growth')} — ${tr(hero!.data.name, lang)}` }] : []),
+];
+const services: Key[] = ['svc.production', 'svc.creators', 'svc.photo', 'svc.reels', 'svc.story', 'svc.growth'];
+const steps: Key[] = ['process.discovery', 'process.strategy', 'process.execution', 'process.launch'];
+---
+
+<Base lang={lang} active="nav.home">
+  <section class="hero dark">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow latin">VegaCore · Marketing Department</span>
+        <h1>{g ? t('hero.title', { from: g.before.followers, to: g.after.followers }) : t('footer.tagline')}</h1>
+        <p class="lede">{t('hero.sub')}</p>
+        <div class="actions">
+          <a class="btn btn--gold" href={`/${lang}/clients/`}>{t('hero.stories')} <Icon name="arrow" flip /></a>
+          <a class="btn btn--on-dark" href={`/${lang}/reels/`}><Icon name="play" /> {t('hero.reels')}</a>
+        </div>
+      </div>
+      {
+        hero && (
+          <a class="hero-card" href={`/${lang}/clients/${hero.id}/`} aria-label={t('hero.case', { name: tr(hero.data.name, lang) })}>
+            <GrowthCard client={hero} lang={lang} />
+            <span class="case-link">
+              {t('hero.case', { name: tr(hero.data.name, lang) })} <Icon name="arrow" flip />
+            </span>
+          </a>
+        )
+      }
+    </div>
+    <div class="wrap">
+      <ul class="proof" role="list">
+        {
+          proof.map((p) => (
+            <li>
+              <strong class="num">{p.value}</strong>
+              <span>{p.label}</span>
+            </li>
+          ))
+        }
+      </ul>
+      {asOf && <p class="asof">{t('proof.asof', { date: formatDate(asOf, lang) })}</p>}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow latin">Success Stories</span>
+          <h2>{t('home.stories')}</h2>
+          <p class="lede">{t('home.stories.sub')}</p>
+        </div>
+        <a class="link-arrow" href={`/${lang}/clients/`}>{t('home.stories.all')} <Icon name="arrow" flip /></a>
+      </div>
+      <div class="cards">
+        {featured.map((c) => <ClientCard client={c} lang={lang} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section dark" id="best-reels">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow latin">Reels</span>
+          <h2>{t('home.reels')}</h2>
+          <p class="lede">{t('home.reels.sub')}</p>
+        </div>
+        <div class="head-actions">
+          <button class="btn btn--on-dark btn--sm" type="button" data-present="#best-reels"><Icon name="present" /> {t('present.start')}</button>
+          <a class="btn btn--gold btn--sm" href={`/${lang}/reels/`}>{t('home.reels.all')} <Icon name="arrow" flip /></a>
+        </div>
+      </div>
+      <div class="reels" data-deck>
+        {best.map((r) => <IgReel reel={r} lang={lang} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow latin">Marketing Department</span>
+          <h2>{t('services.title')}</h2>
+          <p class="lede">{t('services.sub')}</p>
+        </div>
+        <a class="link-arrow" href={`/${lang}/services/`}>{t('nav.services')} <Icon name="arrow" flip /></a>
+      </div>
+      <ol class="services" role="list">
+        {
+          services.map((k, i) => (
+            <li class="card svc">
+              <span class="n num">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{t(k)}</h3>
+              <p>{t(`${k}.text` as Key)}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section process-section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>{t('process.title')}</h2>
+      </div>
+      <ol class="process" role="list">
+        {
+          steps.map((k, i) => (
+            <li>
+              <span class="dot num">{i + 1}</span>
+              <h3>{t(k)}</h3>
+              <p>{t(`${k}.text` as Key)}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section clients-section">
+    <div class="wrap">
+      <h2 class="clients-title">{t('home.clients')}</h2>
+      <ul class="clients" role="list">
+        {
+          allClients.map((c) => (
+            <li>
+              {c.data.showcase === 'story' ? (
+                <a href={`/${lang}/clients/${c.id}/`}>{tr(c.data.name, lang)}</a>
+              ) : (
+                <span>{tr(c.data.name, lang)}</span>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <ContactBand lang={lang} />
+</Base>
+
+<style>
+  .hero {
+    padding-block: clamp(56px, 8vw, 96px) 40px;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: clamp(28px, 5vw, 64px);
+    align-items: center;
+  }
+  .hero-copy {
+    display: grid;
+    gap: 20px;
+    justify-items: start;
+  }
+  .hero h1 {
+    font-size: clamp(2.3rem, 5.6vw, 4.2rem);
+    letter-spacing: -0.01em;
+  }
+  .hero .lede {
+    color: #c9d3ee;
+    max-width: 56ch;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .hero-card {
+    display: grid;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+  }
+  .case-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .case-link :global(svg) {
+    width: 18px;
+    height: 18px;
+  }
+  .hero-card:hover .case-link {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .proof {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: clamp(36px, 5vw, 56px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .proof li {
+    display: grid;
+    gap: 2px;
+    padding: 18px 20px;
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .proof strong {
+    color: var(--gold);
+    font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+    font-weight: 800;
+    line-height: 1.15;
+  }
+  .proof span {
+    color: var(--on-dark-muted);
+    font-size: 0.9rem;
+  }
+  .asof {
+    margin-top: 12px;
+    color: var(--on-dark-muted);
+    font-size: 0.8rem;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .head-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .reels {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 22px;
+    align-items: start;
+  }
+
+  .services {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+  }
+  .svc {
+    display: grid;
+    gap: 8px;
+    align-content: start;
+    padding: 24px;
+    border-inline-start: 4px solid var(--blue);
+  }
+  .svc:nth-child(3n + 2) {
+    border-inline-start-color: var(--gold);
+  }
+  .svc:nth-child(3n + 3) {
+    border-inline-start-color: var(--teal);
+  }
+  .svc .n {
+    color: var(--blue);
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+  .svc h3 {
+    font-size: 1.2rem;
+  }
+  .svc p {
+    color: var(--muted);
+    font-size: 0.96rem;
+  }
+
+  .process-section {
+    padding-top: 0;
+  }
+  .process {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+  }
+  .process li {
+    position: relative;
+    display: grid;
+    gap: 8px;
+    align-content: start;
+    padding-top: 30px;
+  }
+  .process li::before {
+    content: '';
+    position: absolute;
+    top: 17px;
+    inset-inline: 44px -18px;
+    height: 2px;
+    background: var(--rule);
+    opacity: 0.5;
+  }
+  .process li:last-child::before {
+    display: none;
+  }
+  .dot {
+    position: absolute;
+    top: 0;
+    inset-inline-start: 0;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    background: var(--navy);
+    color: #fff;
+    font-weight: 700;
+  }
+  .process h3 {
+    margin-top: 18px;
+    font-size: 1.15rem;
+  }
+  .process p {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .clients-section {
+    padding-top: 0;
+  }
+  .clients-title {
+    font-size: 1rem;
+    color: var(--muted);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 18px;
+  }
+  .clients {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .clients :is(a, span) {
+    display: inline-flex;
+    padding: 12px 22px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--navy);
+    font-weight: 800;
+    text-decoration: none;
+  }
+  .clients a:hover {
+    box-shadow: var(--shadow);
+  }
+
+  @media (max-width: 960px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-card {
+      max-width: 460px;
+    }
+    .proof {
+      grid-template-columns: 1fr 1fr;
+    }
+    .services {
+      grid-template-columns: 1fr 1fr;
+    }
+    .process {
+      grid-template-columns: 1fr 1fr;
+    }
+    .process li::before {
+      display: none;
+    }
+  }
+  @media (max-width: 600px) {
+    .services,
+    .process {
+      grid-template-columns: 1fr;
+    }
+    .reels {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

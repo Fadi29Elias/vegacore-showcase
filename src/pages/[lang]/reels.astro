@@ -1,0 +1,47 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import Filters from '../../components/Filters.astro';
+import IgReel from '../../components/IgReel.astro';
+import ContactBand from '../../components/ContactBand.astro';
+import { getClients, reelsOf } from '../../lib/clients';
+import { getStaticLangPaths, tr, useT, type Lang } from '../../i18n/ui';
+
+export const getStaticPaths = getStaticLangPaths;
+
+const lang = Astro.params.lang as Lang;
+const t = useT(lang);
+const { stories } = await getClients();
+const reels = reelsOf(stories);
+const clientOptions = stories.map((c) => ({ value: c.id, label: tr(c.data.name, lang) }));
+---
+
+<Base lang={lang} title={t('reels.title')} description={t('reels.sub')} active="nav.reels">
+  <div class="dark">
+    <PageHead eyebrow="Reels" title={t('reels.title')} lede={t('reels.sub')} />
+  </div>
+  <Filters lang={lang} scope="#reels" deck="#reels-grid" groups={[{ key: 'client', label: t('filter.client'), options: clientOptions }]} />
+  <div id="reels" class="wall">
+    <div id="reels-grid" class="wrap grid" data-deck>
+      {reels.map((r) => <IgReel reel={r} lang={lang} />)}
+    </div>
+  </div>
+  <ContactBand lang={lang} />
+</Base>
+
+<style>
+  .wall {
+    padding-block: 32px 80px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 22px;
+    align-items: start;
+  }
+  @media (max-width: 600px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,144 @@
+---
+// Before → after snapshot of a client's Instagram profile (from VegaCore's own screenshots).
+import { parseCount, type Client } from '../lib/clients';
+import { tr, useT, type Lang } from '../i18n/ui';
+
+interface Props {
+  client: Client;
+  lang: Lang;
+}
+const { client, lang } = Astro.props;
+const t = useT(lang);
+const g = client.data.growth!;
+const times = Math.floor(parseCount(g.after.followers) / parseCount(g.before.followers));
+const name = tr(client.data.name, lang);
+---
+
+<figure class="growth">
+  <div class="panel before">
+    <span class="tag">{t('growth.before')}</span>
+    <div class="profile">
+      <span class="avatar latin">{name}</span>
+      <div class="nums">
+        <span><strong class="num">{g.before.followers}</strong>{t('growth.followers')}</span>
+        {g.before.posts && <span><strong class="num">{g.before.posts}</strong>{t('growth.posts')}</span>}
+      </div>
+    </div>
+  </div>
+  <div class="arrow" aria-hidden="true">
+    <span class="times num">×{times}</span>
+  </div>
+  <div class="panel after">
+    <span class="tag">{t('growth.after')}</span>
+    <div class="profile">
+      <span class="avatar latin">{name}</span>
+      <div class="nums">
+        <span><strong class="num">{g.after.followers}</strong>{t('growth.followers')}</span>
+        {g.after.posts && <span><strong class="num">{g.after.posts}</strong>{t('growth.posts')}</span>}
+      </div>
+    </div>
+  </div>
+  <figcaption class="cap latin" dir="ltr">@{client.data.handle}</figcaption>
+</figure>
+
+<style>
+  .growth {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 18px;
+    border-radius: calc(var(--radius) + 6px);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: var(--shadow-lg);
+    color: #fff;
+  }
+  .panel {
+    position: relative;
+    padding: 16px 18px;
+    border-radius: var(--radius);
+    background: #0b0a24;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .after {
+    background: linear-gradient(135deg, #10204f, #0b0a24);
+    border-color: rgba(255, 194, 0, 0.55);
+  }
+  .tag {
+    position: absolute;
+    top: 12px;
+    inset-inline-end: 14px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--on-dark-muted);
+  }
+  .after .tag {
+    color: var(--gold);
+  }
+  .profile {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .avatar {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 999px;
+    background: #f1efe9;
+    color: #1b1b1b;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.12);
+  }
+  .nums {
+    display: flex;
+    gap: 22px;
+  }
+  .nums span {
+    display: grid;
+    font-size: 0.82rem;
+    color: var(--on-dark-muted);
+    line-height: 1.3;
+  }
+  .nums strong {
+    color: #fff;
+    font-size: 1.35rem;
+    font-weight: 800;
+  }
+  .after .nums span:first-child strong {
+    color: var(--gold);
+    font-size: 1.9rem;
+  }
+  .arrow {
+    display: grid;
+    place-items: center;
+    height: 34px;
+    position: relative;
+  }
+  .arrow::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    width: 2px;
+    background: linear-gradient(var(--blue), var(--gold));
+  }
+  .times {
+    position: relative;
+    padding: 2px 12px;
+    border-radius: 999px;
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 800;
+    font-size: 0.9rem;
+  }
+  .cap {
+    text-align: center;
+    color: var(--on-dark-muted);
+    font-size: 0.8rem;
+  }
+</style>

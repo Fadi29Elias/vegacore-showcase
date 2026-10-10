@@ -1,0 +1,89 @@
+---
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+import '@fontsource/inter/800.css';
+import '@fontsource/almarai/400.css';
+import '@fontsource/almarai/700.css';
+import '@fontsource/almarai/800.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Viewer from '../components/Viewer.astro';
+import { dir, langs, switchPath, useT, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  active?: string;
+  noindex?: boolean;
+}
+const { lang, title, description, active, noindex } = Astro.props;
+const t = useT(lang);
+const fullTitle = title ? `${title} · ${t('meta.title')}` : `${t('meta.title')} — ${t('footer.tagline')}`;
+const desc = description ?? t('meta.description');
+const path = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang={lang} dir={dir(lang)}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#09072c" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    {langs.map((l) => <link rel="alternate" hreflang={l} href={new URL(switchPath(path, l), Astro.site)} />)}
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={lang === 'ar' ? 'ar_SY' : 'en_US'} />
+  </head>
+  <body>
+    <a class="skip" href="#main">{t('nav.skip')}</a>
+    <Header lang={lang} active={active} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <Viewer lang={lang} />
+    <script>
+      // Instagram embeds report their content height; size each iframe to fit.
+      addEventListener('message', (e) => {
+        if (e.origin !== 'https://www.instagram.com') return;
+        let data: { type?: string; details?: { height?: number } };
+        try {
+          data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+        } catch {
+          return;
+        }
+        const h = data?.type === 'MEASURE' ? data.details?.height : undefined;
+        if (!h) return;
+        document.querySelectorAll<HTMLIFrameElement>('iframe.ig').forEach((f) => {
+          if (f.contentWindow === e.source) f.style.height = `${h}px`;
+        });
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+  .skip {
+    position: absolute;
+    inset-inline-start: 16px;
+    top: -60px;
+    z-index: 100;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .skip:focus {
+    top: 12px;
+  }
+</style>

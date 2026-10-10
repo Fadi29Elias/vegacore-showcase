@@ -1,0 +1,190 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/brand/vega-logo-full.png';
+import Icon from './Icon.astro';
+import { other, switchPath, useT, type Key, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  active?: string;
+}
+const { lang, active } = Astro.props;
+const t = useT(lang);
+const links: [string, Key][] = [
+  ['', 'nav.home'],
+  ['clients/', 'nav.stories'],
+  ['reels/', 'nav.reels'],
+  ['services/', 'nav.services'],
+  ['contact/', 'nav.contact'],
+];
+const to = other(lang);
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href={`/${lang}/`} aria-label="VegaCore">
+      <Image src={logo} alt="VegaCore" height={52} densities={[1, 2]} loading="eager" />
+    </a>
+    <nav id="site-nav" class="nav" aria-label={t('nav.menu')}>
+      {
+        links.map(([href, key]) => (
+          <a href={`/${lang}/${href}`} aria-current={active === key ? 'page' : undefined}>
+            {t(key)}
+          </a>
+        ))
+      }
+    </nav>
+    <div class="tools">
+      <a class="lang" href={switchPath(Astro.url.pathname, to)} hreflang={to} lang={to} data-lang-switch>
+        <Icon name="globe" />
+        <span>{t('nav.switch')}</span>
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label={t('nav.menu')}>
+        <Icon name="menu" />
+      </button>
+    </div>
+  </div>
+  <div class="rule"></div>
+</header>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('.menu-btn');
+  const nav = document.getElementById('site-nav');
+  btn?.addEventListener('click', () => {
+    const open = btn.getAttribute('aria-expanded') !== 'true';
+    btn.setAttribute('aria-expanded', String(open));
+    nav?.classList.toggle('open', open);
+  });
+  // Keep filters (?type=…&industry=…) when switching language.
+  document.querySelectorAll<HTMLAnchorElement>('[data-lang-switch]').forEach((a) =>
+    a.addEventListener('click', () => {
+      a.href = a.href.split('?')[0] + location.search;
+    }),
+  );
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: saturate(1.4) blur(14px);
+  }
+  .rule {
+    height: 2px;
+    background: var(--rule);
+    opacity: 0.9;
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    min-height: var(--header-h);
+  }
+  .brand {
+    display: flex;
+    flex: none;
+  }
+  .brand img {
+    height: 52px;
+    width: auto;
+  }
+  .nav {
+    display: flex;
+    gap: 4px;
+    margin-inline-start: auto;
+  }
+  .nav a {
+    padding: 8px 14px;
+    border-radius: 999px;
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 0.96rem;
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+  }
+  .nav a:hover {
+    background: var(--blue-pale2);
+  }
+  .nav a[aria-current='page'] {
+    background: var(--navy);
+    color: #fff;
+  }
+  .tools {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+  }
+  .lang[lang='ar'] {
+    font-family: var(--font-ar);
+  }
+  .lang[lang='en'] {
+    font-family: var(--font-en);
+  }
+  .lang svg {
+    width: 18px;
+    height: 18px;
+    color: var(--blue);
+  }
+  .menu-btn {
+    display: none;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+    color: var(--navy);
+    cursor: pointer;
+    place-items: center;
+  }
+
+  @media (max-width: 860px) {
+    .bar {
+      gap: 12px;
+    }
+    .brand img {
+      height: 44px;
+    }
+    .tools {
+      margin-inline-start: auto;
+    }
+    .menu-btn {
+      display: grid;
+    }
+    .nav {
+      position: absolute;
+      inset-inline: 0;
+      top: 100%;
+      flex-direction: column;
+      gap: 2px;
+      margin: 0;
+      padding: 12px var(--gutter) 20px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      display: none;
+    }
+    .nav.open {
+      display: flex;
+    }
+    .nav a {
+      padding: 12px 14px;
+      border-radius: 12px;
+    }
+  }
+</style>

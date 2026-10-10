@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base lang="ar" title="404" noindex>
+  <section class="wrap nf">
+    <span class="eyebrow latin">404</span>
+    <h1>الصفحة غير موجودة</h1>
+    <p class="lede latin" lang="en">Page not found.</p>
+    <div class="actions">
+      <a class="btn" href="/ar/">الرئيسية</a>
+      <a class="btn btn--ghost latin" href="/en/" lang="en">Home</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    display: grid;
+    gap: 16px;
+    justify-items: start;
+    padding-block: 120px;
+  }
+  .actions {
+    display: flex;
+    gap: 12px;
+  }
+</style>

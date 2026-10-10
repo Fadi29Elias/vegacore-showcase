@@ -1,0 +1,70 @@
+---
+import type { Client } from '../lib/clients';
+import { tr, type Lang } from '../i18n/ui';
+
+interface Props {
+  stats: Client['data']['stats'];
+  lang: Lang;
+}
+const { stats, lang } = Astro.props;
+// Wrap digit runs in .num so they stay LTR inside Arabic text.
+const nums = (s: string) => s.split(/([+×]?\d[\d.,]*[%KM]?)/).map((part, i) => (i % 2 ? { n: part } : { t: part }));
+---
+
+<ul class="stats" role="list">
+  {
+    stats.map((s) => (
+      <li>
+        <span class="label">{tr(s.label, lang)}</span>
+        <span class="value num">{s.value}</span>
+        {s.from && (
+          <span class="from num">
+            {s.from} → {s.value}
+          </span>
+        )}
+        {s.note && <span class="note">{nums(tr(s.note, lang)).map((p) => ('n' in p ? <span class="num">{p.n}</span> : p.t))}</span>}
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  li {
+    display: grid;
+    gap: 4px;
+    align-content: start;
+    padding: 20px;
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-top: 3px solid var(--gold);
+  }
+  .label {
+    color: var(--on-dark-muted);
+    font-size: 0.86rem;
+    font-weight: 700;
+  }
+  .value {
+    color: #fff;
+    font-size: clamp(1.9rem, 3.5vw, 2.5rem);
+    font-weight: 800;
+    line-height: 1.2;
+  }
+  .from {
+    color: var(--on-dark-muted);
+    font-size: 0.85rem;
+  }
+  .note {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+</style>

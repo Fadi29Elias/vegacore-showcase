@@ -1,0 +1,171 @@
+---
+// Chip filters whose state lives in the URL (?client=poplar) so a salesperson can send a
+// link that opens on just the relevant work. Filters every [data-item] inside `scope`
+// by matching data-<key> attributes.
+import Icon from './Icon.astro';
+import { useT, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  scope: string;
+  groups: { key: string; label: string; options: { value: string; label: string }[] }[];
+  /** CSS selector of the deck that Present mode walks through. */
+  deck: string;
+}
+const { lang, scope, groups, deck } = Astro.props;
+const t = useT(lang);
+---
+
+<div class="filters" data-filters data-scope={scope}>
+  <div class="wrap row">
+    <div class="groups">
+      {
+        groups.map((g) => (
+          <div class="group" role="group" aria-label={g.label}>
+            <span class="label">{g.label}</span>
+            <button type="button" class="f" data-key={g.key} data-value="all" aria-pressed="true">
+              {t('filter.all')}
+            </button>
+            {g.options.map((o) => (
+              <button type="button" class="f" data-key={g.key} data-value={o.value} aria-pressed="false">
+                {o.label}
+              </button>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+    <div class="tools">
+      <button type="button" class="btn btn--ghost btn--sm" data-copy data-label={t('filter.copy')} data-done={t('filter.copied')}>
+        <Icon name="link" /> <span>{t('filter.copy')}</span>
+      </button>
+      <button type="button" class="btn btn--sm" data-present={deck}><Icon name="present" /> {t('present.start')}</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-filters]').forEach((bar) => {
+    const scope = document.querySelector<HTMLElement>(bar.dataset.scope!);
+    if (!scope) return;
+    const keys = [...new Set([...bar.querySelectorAll<HTMLElement>('.f')].map((b) => b.dataset.key!))];
+    const state: Record<string, string> = Object.fromEntries(keys.map((k) => [k, 'all']));
+    const params = new URLSearchParams(location.search);
+    for (const key of keys) {
+      const v = params.get(key);
+      if (v && bar.querySelector(`[data-key="${key}"][data-value="${CSS.escape(v)}"]`)) state[key] = v;
+    }
+
+    function apply() {
+      bar.querySelectorAll<HTMLButtonElement>('.f').forEach((b) =>
+        b.setAttribute('aria-pressed', String(state[b.dataset.key!] === b.dataset.value)),
+      );
+      scope!.querySelectorAll<HTMLElement>('[data-item]').forEach((el) => {
+        el.hidden = !keys.every((k) => state[k] === 'all' || el.dataset[k] === state[k]);
+      });
+      const url = new URL(location.href);
+      for (const key of keys) {
+        if (state[key] === 'all') url.searchParams.delete(key);
+        else url.searchParams.set(key, state[key]);
+      }
+      history.replaceState(null, '', url);
+    }
+
+    bar.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      const b = target.closest<HTMLButtonElement>('.f');
+      if (b) {
+        state[b.dataset.key!] = b.dataset.value!;
+        apply();
+      }
+      const copy = target.closest<HTMLButtonElement>('[data-copy]');
+      if (copy) {
+        navigator.clipboard?.writeText(location.href).then(() => {
+          const span = copy.querySelector('span')!;
+          span.textContent = copy.dataset.done!;
+          setTimeout(() => (span.textContent = copy.dataset.label!), 1800);
+        });
+      }
+    });
+
+    apply();
+  });
+</script>
+
+<style>
+  .filters {
+    position: sticky;
+    top: calc(var(--header-h) + 2px);
+    z-index: 30;
+    padding-block: 12px;
+    background: rgba(245, 248, 253, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 24px;
+  }
+  .groups {
+    display: grid;
+    gap: 8px;
+    min-width: 0;
+  }
+  .group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .label {
+    flex: none;
+    min-width: 56px;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  .f {
+    flex: none;
+    padding: 6px 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--navy);
+    font: inherit;
+    font-size: 0.86rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .f:hover {
+    background: var(--blue-pale2);
+  }
+  .f[aria-pressed='true'] {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: #fff;
+  }
+  .tools {
+    display: flex;
+    gap: 8px;
+  }
+  @media (max-width: 860px) {
+    .filters {
+      position: static;
+    }
+    .row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .label {
+      min-width: auto;
+    }
+    .tools > * {
+      flex: 1;
+    }
+  }
+</style>
